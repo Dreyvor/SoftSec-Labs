@@ -5,7 +5,8 @@
 /* We allocate the memory for the palette for this image */
 struct pixel *allocate_palette()
 {
-    struct pixel *ptr = malloc(sizeof(struct pixel));
+    struct pixel *ptr = malloc(sizeof(struct pixel)); 
+    //CHECK: No check if malloc is good
     return ptr;
 }
 
@@ -38,12 +39,13 @@ int main(int argc, char *argv[])
     if (strlen(hex_color_arg) != 6) {
         goto error;
     }
-
+	
     long height = strtol(height_arg, &end_ptr, 10);
     
     /* If the user provides negative height or the height is 0 and the end_ptr hasn't moved
      * we issue an error and free palette
      */
+     //BUG: Here there is no brackets! ==> palette is never freed
     if (height < 0 || *end_ptr)
         goto error;
         free(palette);
@@ -72,6 +74,7 @@ int main(int argc, char *argv[])
         goto error_mem;
     }
 
+	//CHECK: No check after malloc ?
     img->px = malloc(sizeof(struct pixel) * height * width);
     if (!img->px) {
         goto error_img;
@@ -126,7 +129,7 @@ int main(int argc, char *argv[])
 /* We use goto to jump to the corresponding error handling code.
  * This gets rid of repetitive if chunks we'd use otherwise
  */
-
+//CHECK: Is everything freed on an error ? ==> after a goto we execute every steps below and continue below (here we return 1 at the end)
 error:
     printf("Usage: %s output_name height width hex_color\n", argv[0]);
     return 1;
