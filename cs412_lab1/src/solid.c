@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 {
     struct image *img = NULL;
     struct pixel *palette = allocate_palette();
+    //NON-FREED: palette is never freed
 
 /*
 * goto statements should be used only in two cases:
@@ -107,6 +108,8 @@ int main(int argc, char *argv[])
     free(img->px);
     free(img);
 
+	//NOTE: Up to here, only one problem. Non-freed palette...
+
     /* We want to inform user how big the new image is.
      * "stat -c %s filename" prints the size of the file
      * 
@@ -119,9 +122,13 @@ int main(int argc, char *argv[])
     /* printf will write to the screen when it encounters a new line
      * By calling fflush we force the program to output "Size " right away
      */
+     
+     //BUG: COMMAND INJECTION ==> put an output file like ";cat /etc/passwd"
+     // The command injection works with "./solid "solid;ls" 100 100 00ffff"
     fflush(stdout);
     strcat(command, "stat -c %s ");
     strncat(command, output_name, 500);
+    printf("COMMAND: %s", command);
     system(command);
 
     return 0;

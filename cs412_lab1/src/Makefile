@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -g -w
+CFLAGS_ORIGINAL = -g -w
+CFLAGS = -g -Wall #-Werror
 ## BE CAREFUL WITH THE FLAG HERE. ONE IGNORE EVERY ERRORS MAYBE
 
 all: libpngparser solid checkerboard filter circle rect resize_image
@@ -10,7 +11,7 @@ clean:
 .PHONY: all clean fix_all_bugs
 
 libpngparser: pngparser.h pngparser.c crc.c crc.h
-	$(CC) $(CFLAGS) -c pngparser.c crc.c
+	$(CC) $(CFLAGS_ORIGINAL) -c pngparser.c crc.c
 	ar rcs libpngparser.a pngparser.o crc.o
 	rm pngparser.o crc.o
 
