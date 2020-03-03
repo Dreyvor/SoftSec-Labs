@@ -1,28 +1,30 @@
-#### Name
+# TODO: Correct it in code
+
+### Name
 Command injection
 
-#### Description
+### Description
 The user is able to put an output name of at most 500 characters. Then the program execute the following command (lines 120-122):
 ```
 stat -c %s outputNameChosenByUser
 ```
 As the output name is not sanitized, the user is able execute whatever he wants by using `;` or `|` for example.
 
-#### Affected Lines
+### Affected Lines
 In `solid.c:122`
 
-#### Expected vs Observed
+### Expected vs Observed
 We expect that the program gives the size of the output without executing any specific command injected as described above.
 
-#### Steps to Reproduce
+### Steps to Reproduce
 
-##### Command
+#### Command
 ```
 ./solid "solid;whoami" 100 100 00ffff
 ```
-##### Proof-of-Concept Input (if needed)
+#### Proof-of-Concept Input (if needed)
 Nothing is needed for that bug as `solid.c` generates an output and doesn't take any file as input.
 
-#### Suggested Fix Description
+### Suggested Fix Description
 We have to sanitize the output name given by the user. First step is to avoid the semicolons and possibilities of pipes.
 I have to ask for that on Thursday.

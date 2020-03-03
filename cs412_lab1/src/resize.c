@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
     double factor = atof(argv[3]);
 
     /* Resizing and image to 0 isn't allowed */
-    //BUG: factor shouldn't be 0 but here we can set it to 0
     if (factor <= 0) {
         goto error_usage;
     }
@@ -31,8 +30,7 @@ int main(int argc, char *argv[])
 
     unsigned height = img->size_y;
     unsigned width = img->size_x;
-
-	//BUG: Check for type confusion here
+    
     unsigned new_height = (unsigned) (img->size_y * factor);
     unsigned new_width = (unsigned) (img->size_x * factor);
 
