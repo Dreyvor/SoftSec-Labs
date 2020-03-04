@@ -23,7 +23,6 @@ That's not really fair, but doing that will simulate the behavior if an allocati
 #### Command
 ```
 ./resize_image poc.png output.png 2
-
 ```
 
 #### Proof-of-Concept Input (if needed)

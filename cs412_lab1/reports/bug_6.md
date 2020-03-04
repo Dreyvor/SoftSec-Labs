@@ -18,7 +18,6 @@ If you run the code while your memory is full (RAM + swap), you could encouter a
 #### Command
 ```
 ./resize_image poc.png output.png 2
-
 ```
 
 #### Proof-of-Concept Input (if needed)
