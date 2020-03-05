@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "pngparser.h"
 
 /* We allocate the memory for the palette for this image */
@@ -120,21 +121,29 @@ int main(int argc, char *argv[])
      * 
      * To prevent buffer overflows we use strncat.
      */
-    char command[512] = {0};
+    //char command[512] = {0};
 
-    printf("Size: ");
+    //printf("Size: ");
 
     /* printf will write to the screen when it encounters a new line
      * By calling fflush we force the program to output "Size " right away
      */
-     
-     //BUG: COMMAND INJECTION ==> put an output file like ";cat /etc/passwd"
-     // The command injection works with "./solid "solid;ls" 100 100 00ffff"
+    
+    struct stat sb;
+    if (lstat(output_name, &sb) == -1) {
+	   perror("lstat");
+	   exit(1);
+	}
+	
+	printf("Size: %lld\n", (long long) sb.st_size);
+    
+    /* 
     fflush(stdout);
     strcat(command, "stat -c %s ");
     strncat(command, output_name, 500);
     printf("COMMAND: %s", command);
     system(command);
+    */
 
     return 0;
 

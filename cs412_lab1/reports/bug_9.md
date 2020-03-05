@@ -1,5 +1,3 @@
-# TODO: Fix the code
-
 ### Name
 Stack Based Buffer Overflow due to an unverified input size.
 

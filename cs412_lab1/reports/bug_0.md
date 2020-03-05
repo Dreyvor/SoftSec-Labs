@@ -1,5 +1,3 @@
-# TODO: Correct it in code
-
 ### Name
 Command injection
 
@@ -20,11 +18,12 @@ We expect that the program gives the size of the output without executing any sp
 
 #### Command
 ```
-./solid "solid;whoami" 100 100 00ffff
+./solid "solid;whoami" 100 100 0cafe0
 ```
 #### Proof-of-Concept Input (if needed)
 Nothing is needed for that bug as `solid.c` generates an output and doesn't take any file as input.
 
 ### Suggested Fix Description
-We have to sanitize the output name given by the user. First step is to avoid the semicolons and possibilities of pipes.
-I have to ask for that on Thursday.
+We have to sanitize the output name given by the user. A possibility for that is to use `syscall` instead of `system`.
+Another way, the one we used here is to use `lstat` with the `struct stat`. If you want to have more info about that,
+use the command `man 2 stat`.

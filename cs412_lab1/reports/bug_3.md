@@ -1,5 +1,3 @@
-# TODO: Fix the src
-
 ### Name
 Invalid memory access (asking for write access)
 
