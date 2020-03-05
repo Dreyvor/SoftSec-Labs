@@ -22,8 +22,8 @@ void filter_grayscale(struct image *img, void *weight_arr)
             luminosity += weights[0] * image_data[i][j].red;
             luminosity += weights[1] * image_data[i][j].green;
             luminosity += weights[2] * image_data[i][j].blue;
-
-
+			
+			
             image_data[i][j].red   = (uint8_t) luminosity;
             image_data[i][j].green = (uint8_t) luminosity;
             image_data[i][j].blue  = (uint8_t) luminosity;
