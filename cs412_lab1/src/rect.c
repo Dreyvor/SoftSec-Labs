@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     char input[256];
     char output[256];
 
-    int radius;
+    //int radius; //unused
     struct image *img;
 
     /* There isn't any complex error handling in this function, so we use a simple if */
@@ -17,6 +17,10 @@ int main(int argc, char *argv[])
     }
 
     // Copy the filenames into separate arrays for easier reference
+    if (strlen(argv[1]) > sizeof(input) || strlen(argv[2]) > sizeof(output)){
+		printf("ERROR input or output name too big");
+		exit(1);
+	}
     strcpy(input, argv[1]);
     strcpy(output, argv[2]);
 

@@ -6,7 +6,11 @@
 struct pixel *allocate_palette()
 {
     struct pixel *ptr = malloc(sizeof(struct pixel)); 
-    //CHECK: No check if malloc is good
+    if(!ptr){
+		printf("ERROR memory: not enough memory to allocate the palette");
+		exit(1);
+	}
+    
     return ptr;
 }
 
@@ -47,9 +51,9 @@ int main(int argc, char *argv[])
      * we issue an error and free palette
      */
      //BUG: Here there is no brackets! ==> palette is never freed
-    if (height < 0 || *end_ptr)
+    if (height < 0 || *end_ptr){
         goto error;
-        free(palette);
+    }
 
 
     long width = strtol(width_arg, &end_ptr, 10);
@@ -107,6 +111,7 @@ int main(int argc, char *argv[])
     
     free(img->px);
     free(img);
+    free(palette);
 
 	//NOTE: Up to here, only one problem. Non-freed palette...
 
@@ -138,6 +143,7 @@ int main(int argc, char *argv[])
  */
 //CHECK: Is everything freed on an error ? ==> after a goto we execute every steps below and continue below (here we return 1 at the end)
 error:
+	free(palette);
     printf("Usage: %s output_name height width hex_color\n", argv[0]);
     return 1;
 
@@ -146,6 +152,7 @@ error_px:
 error_img:
     free(img);
 error_mem:
+	free(palette);
     printf("Couldn't allocate memory\n");
     return 1;
 }

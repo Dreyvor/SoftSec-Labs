@@ -16,11 +16,12 @@ The expected behavior for a function is to end without an `core dumped` (either 
 Use the `rect` command with an argument's size bigger than 256 characters as input (or output) name.
 
 #### Command
-`./rect poc.png long_output_name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 0 0 30 30 0cafe0
-`
+```
+./rect poc.png long_output_name111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 0 0 30 30 0cafe0
+```
 
 #### Proof-of-Concept Input (if needed)
 `poc.png` is needed. This file is generated using `./checkerboard poc.png 100 100 10 00dead beaf00`
 
 ### Suggested Fix Description
-Use `strncpy(...)` instead of `strcpy(...)` in order to avoid stack based buffer overflows during the copy of the arguments.
+Check the length of the arguments before the copy in order to avoid stack based buffer overflows during the copy of the arguments.

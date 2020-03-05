@@ -1,5 +1,3 @@
-# TODO: Fix the code
-
 ### Name
 Type confusion
 

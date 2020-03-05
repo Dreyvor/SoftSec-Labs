@@ -1,4 +1,4 @@
-# TODO: Fix the code
+# TODO: CHECK LINES
 
 ### Name
 Local pointer returned (Unallocated memory)
@@ -8,7 +8,7 @@ To return a pointer from a function we have to be sure that the pointer life-tim
 (i.e. you have to use a `malloc` when you return a pointer).
 
 ### Affected Lines
-`filter.c:126-127`
+`filter.c:101-102`
 
 Due to these lines it pops an error when we use this function and try to use the returned value
 (e.g. at lines `filter.c:143-146` because `neg` is the value return by the previously described function).
@@ -31,5 +31,5 @@ Simply run `filter` while asking for a negative filter.
 `poc.png` is needed. This file is generated using `./checkerboard poc.png 100 100 10 00dead beaf00`.
 
 ### Suggested Fix Description
-Allocate the memory for the value returned by the function `get_pixel()` at `filter.c:124-128`.
+Allocate the memory for the value returned by the function `get_pixel()` at `filter.c:101-102`.
 We can use a simple malloc and verifying the allocation before returning the result.

@@ -1,5 +1,3 @@
-# TODO: Fix the code
-
 ### Name
 Memory allocation not checked
 

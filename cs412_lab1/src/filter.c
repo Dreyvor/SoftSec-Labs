@@ -67,14 +67,14 @@ void filter_blur(struct image *img, void *r)
 				y_max = img->size_y - 1;
 			}
 			
-			long x_min = i-radius;
+			long x_min = j-radius;
 			if (x_min < 0){
 				x_min = 0;
 			}
 
-			long x_max = i+radius;
+			long x_max = j+radius;
 			if (x_max >= img->size_x){
-				x_max=img->size_x - 1;
+				x_max = img->size_x - 1;
 			}
 
             /* We iterate over all pixels in the square */
@@ -89,7 +89,7 @@ void filter_blur(struct image *img, void *r)
                     * Done (x_min, x_max, y_min, y_max)
                     */
 					
-                    struct pixel current = image_data[i + y_offset][j + x_offset];
+                    struct pixel current = image_data[y_offset][x_offset];
 					
 
                     red += current.red;
@@ -123,8 +123,12 @@ void filter_blur(struct image *img, void *r)
 /* We allocate and return a pixel */
 struct pixel * get_pixel()
 {
-    struct pixel px;
-    return &px;
+    struct pixel *px = malloc(sizeof(struct pixel));
+    if (!px){
+		printf("ERROR in get_pixel: not enough memory for allocation");
+		exit(1);
+	}
+    return px;
 }
 
 /* This filter just negates every color in the image */
@@ -197,6 +201,14 @@ int main(int argc, char *argv[])
 
     fil.filter = NULL;
     fil.arg = NULL;
+    
+    if(strlen(argv[1]) > sizeof(input) ||
+		strlen(argv[2]) > sizeof(output) ||
+		strlen(argv[3]) > sizeof(command) ||
+		strlen(argv[4]) > sizeof(arg)){
+			printf("ERROR: Please keep the arguments smaller than 256 characters");
+			exit(1);
+	}
 
     /* Copy arguments for easier reference */
     strcpy(input, argv[1]);

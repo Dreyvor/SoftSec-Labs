@@ -1,6 +1,3 @@
-# TODO: Fix the code
-# TODO: Fix the `Steps to reproduce`
-
 ### Name
 Memory management - (double free & `img` not freed)
 
