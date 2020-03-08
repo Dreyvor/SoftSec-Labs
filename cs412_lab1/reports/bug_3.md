@@ -17,7 +17,7 @@ Enter coordinate 0,0 with a radius of 10
 
 #### Command
 ```
-./circle poc.png circle_poc.png 5 5 100 0cafe0
+./circle poc.png output.png 5 5 100 0cafe0
 ```
 
 #### Proof-of-Concept Input (if needed)

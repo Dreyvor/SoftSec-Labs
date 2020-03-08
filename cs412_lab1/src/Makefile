@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS_ORIGINAL = -g -w
-CFLAGS = -g -Wall #-Werror
+CFLAGS = $(CFLAGS_ORIGINAL) #-g -Wall #-Werror
 ## BE CAREFUL WITH THE FLAG HERE. ONE IGNORE EVERY ERRORS MAYBE
 
 all: libpngparser solid checkerboard filter circle rect resize_image

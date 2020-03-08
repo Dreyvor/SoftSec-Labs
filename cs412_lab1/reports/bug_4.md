@@ -16,7 +16,7 @@ Run the code with some really big resize factor.
 
 #### Command
 ```
-./resize_image poc.png out.png 1000000000000000000000000
+./resize_image poc.png output.png 1000000000000000000000000
 ```
 
 #### Proof-of-Concept Input (if needed)

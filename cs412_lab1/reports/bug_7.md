@@ -1,5 +1,3 @@
-# TODO: CHECK LINES
-
 ### Name
 Local pointer returned (Unallocated memory)
 
@@ -11,7 +9,7 @@ To return a pointer from a function we have to be sure that the pointer life-tim
 `filter.c:101-102`
 
 Due to these lines it pops an error when we use this function and try to use the returned value
-(e.g. at lines `filter.c:143-146` because `neg` is the value return by the previously described function).
+(e.g. at lines `filter.c:124` because `neg` is the value return by the previously described function).
 
 ### Expected vs Observed
 We expect the value returned by `get_pixel` not to be `NULL` (i.e. `0x0`).
