@@ -11,7 +11,8 @@ The memory allocation of `new_img->px` at `resize.c:47` is not checked.
 If `malloc` isn't able to allocate the space requested we expect an error message.
 
 ### Steps to Reproduce
-If you run the code while your memory is full (RAM + swap), you could encouter an error.
+If you run the code while your memory is full (RAM + swap), you could encouter an error at lines using `new_img->px`.
+To simulate this behaviour you could set the pointer `new_img->px` to `NULL` after the malloc at `resize.c:47`
 
 #### Command
 ```

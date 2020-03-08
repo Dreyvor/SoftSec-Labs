@@ -11,7 +11,7 @@ If we allocate something on the heap, we have to free it at the end of the progr
 We expect no memory leak. We have memory leak with `struct pixel *palette`.
 
 ### Steps to Reproduce
-Run the code with ASAN using some option to detect thememory leakage
+Compile the code with ASAN using some option to detect the memory leaks.
 
 #### Command
 ```

@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
     uint8_t alpha;
     struct image *img = NULL;
     double weights[] = {0.2125, 0.7154, 0.0721};
-
+	
     /* Some filters take no arguments, while others have 1 */
     if (argc != 4 && argc != 5) {
         goto error_usage;
@@ -202,10 +202,9 @@ int main(int argc, char *argv[])
     fil.filter = NULL;
     fil.arg = NULL;
     
-    if(strlen(argv[1]) > sizeof(input) ||
-		strlen(argv[2]) > sizeof(output) ||
-		strlen(argv[3]) > sizeof(command) ||
-		strlen(argv[4]) > sizeof(arg)){
+    if(strlen(argv[1]) >= sizeof(input) ||
+		strlen(argv[2]) >= sizeof(output) ||
+		strlen(argv[3]) >= sizeof(command)){
 			printf("ERROR: Please keep the arguments smaller than 256 characters");
 			exit(1);
 	}
@@ -217,8 +216,13 @@ int main(int argc, char *argv[])
 
     /* If the filter takes an argument, copy it */
     if (argv[4]) {
-        strcpy(arg, argv[4]);
-    }
+		if(strlen(argv[4]) >= sizeof(arg)){
+			printf("ERROR: Please keep the arguments smaller than 256 characters");
+			exit(1);
+		} else {
+			strcpy(arg, argv[4]);
+		}
+	}
 
     /* Error when loading a png image */
     if (load_png(input, &img)) {

@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     long square_width = strtol(square_width_arg, &end_ptr, 10);
     
     if (square_width <= 0 || *end_ptr) {
-        goto error ;
+        goto error;
     }
 
     /* We assign colors to the palette */
@@ -91,13 +91,13 @@ int main(int argc, char *argv[])
 
     img->size_x = width;
     img->size_y = height;
-
+	
     {
         struct pixel (*image_data)[width] = (struct pixel (*)[width])img->px;
 
         /* We segment the image into squares and fill each square with its color */
-        for (int i = 0; i <= (height + square_width - 1)/square_width; i++) {
-            for (int j = 0; j <= (width + square_width - 1)/square_width; j++) {
+        for (int i = 0; i < (height + square_width - 1)/square_width; i++) {
+            for (int j = 0; j < (width + square_width - 1)/square_width; j++) {
 
                 /* Calculate the color based on the square index */
                 int color = (i + j)%2;
@@ -106,8 +106,8 @@ int main(int argc, char *argv[])
                 int square_top_left_x = j * square_width;
                 int square_top_left_y = i * square_width;
 
-				int bound_x = square_top_left_x + square_width >= width ? width-square_top_left_x-1 : square_width;
-				int bound_y = square_top_left_y + square_width >= height ? height-square_top_left_y-1 : square_width;
+				int bound_x = square_top_left_x + square_width >= width ? width-square_top_left_x : square_width;
+				int bound_y = square_top_left_y + square_width >= height ? height-square_top_left_y : square_width;
 
                 /* This iterates over a square and fills it with the correct color */
                 for (int x = 0; x < bound_x; x++) {

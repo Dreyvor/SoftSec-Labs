@@ -15,12 +15,13 @@ int main(int argc, char *argv[])
         printf("Usage: %s input_image output_image top_left_x top_left_y bottom_right_x bottom_right_y hex_color\n", argv[0]);
         return 1;
     }
-
+	
     // Copy the filenames into separate arrays for easier reference
-    if (strlen(argv[1]) > sizeof(input) || strlen(argv[2]) > sizeof(output)){
+    if (strlen(argv[1]) >= sizeof(input) || strlen(argv[2]) >= sizeof(output)){
 		printf("ERROR input or output name too big");
 		exit(1);
 	}
+	
     strcpy(input, argv[1]);
     strcpy(output, argv[2]);
 
