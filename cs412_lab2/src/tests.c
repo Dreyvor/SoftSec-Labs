@@ -642,30 +642,28 @@ START_TEST(blur_radius_edge_cases) {
   int cnt = 0;
   
   int radil[5] = {INT_MIN, INT_MAX, 0, img.size_x, img.size_y};
+  size_t radil_len = sizeof(radil)/sizeof(radil[0]);
   
-  for (size_t i = 0 ; i < 5 ; i++){
+  for (size_t i = 0 ; i < radil_len ; i++){
 		int *radius = &radil[i];
 		
 		struct image dupl_img = duplicate_img(img);
 		
-		//run blur filters
+		/* Run blur filters
+		 * As we just test if it crashes, we don't even need to duplicate the original image.
+		 * However, it's said that we may duplicate, then I chose to do some duplications (only 5 times).
+		 */
 		filter_blur(&dupl_img, radius);
-		cnt++;
 		*radius=radil[i]/2;
 		filter_blur(&dupl_img, radius);
-		cnt++;
 		*radius=radil[i]+1;
 		filter_blur(&dupl_img, radius);
-		cnt++;
 		*radius=radil[i]-1;
 		filter_blur(&dupl_img, radius);
-		cnt++;
 		
 		free(dupl_img.px);
 		dupl_img.px=NULL;
 	}
-  
-  ck_assert_int_eq(cnt, 5*4);
   
   free(img.px);
   img.px=NULL;
