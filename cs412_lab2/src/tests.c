@@ -467,6 +467,7 @@ char *grayscale_output[] = {
 START_TEST(grayscale_examples) {
   double weights[] = {0.2125, 0.7154, 0.0721};
   /* TODO: Implement */
+  ck_assert_int_eq(1,2);
 }
 END_TEST
 
@@ -474,13 +475,88 @@ END_TEST
  * Then invert the result again and verify that you get a black image back
  * The alpha channel needs to be intact in both cases */
 START_TEST(negative_functionality) {
-  /* TODO: Implement */
+  //Generate the black image
+  struct image img;
+  int size_limit = 512;
+  
+  srand(time(0));
+  
+  do{  img.size_x = rand() % size_limit; } while(img.size_x == 0);
+  do{  img.size_y = rand() % size_limit; } while(img.size_y == 0);
+  
+  img.px = malloc(img.size_x * img.size_y * sizeof(struct pixel));
+  if(img.px == NULL){
+    assert(0 && "Rerun test, malloc failed");
+	}
+	
+	ck_assert_int_gt(img.size_x, 0);
+	ck_assert_int_lt(img.size_x, 512);
+	ck_assert_int_gt(img.size_y, 0);
+	ck_assert_int_lt(img.size_y, 512);
+	
+	ck_assert_ptr_ne(img.px, NULL);
+	
+  for(long i = 0; i < img.size_y * img.size_x; i++) {
+		img.px[i].red = 0;
+		img.px[i].green = 0;
+		img.px[i].blue = 0;
+    img.px[i].alpha = 128;
+  }
+  
+  //Apply the negative filter then check the alpha.
+  filter_negative(&img, NULL);
+  
+  //Check colors
+  for(long i = 0; i < img.size_y * img.size_x; i++) {
+		ck_assert_int_eq(img.px[i].red, 255);
+		ck_assert_int_eq(img.px[i].green, 255);
+		ck_assert_int_eq(img.px[i].blue, 255);
+    ck_assert_int_eq(img.px[i].alpha, 128);
+  }
+  
+  //SECOND PART
+  //Apply the negative filter then check the alpha again.
+  filter_negative(&img, NULL);
+  
+  for(long i = 0; i < img.size_y * img.size_x; i++) {
+		ck_assert_int_eq(img.px[i].red, 0);
+		ck_assert_int_eq(img.px[i].green, 0);
+		ck_assert_int_eq(img.px[i].blue, 0);
+    ck_assert_int_eq(img.px[i].alpha, 128);
+  }
+  
+  free(img.px);
+  img.px = NULL;
+  
 }
 END_TEST
 
 /* Check if the filter doesn't crash when we pass a 0x0 image */
 START_TEST(negative_zero_size) {
-  /* TODO: Implement */
+	//generate a 0x0 img
+  struct image img;
+  int size_limit = 0;
+  
+  img.size_x = 0;
+  img.size_y = 0;
+  
+  img.px = malloc(img.size_x * img.size_y * sizeof(struct pixel));
+  if(img.px == NULL){
+    assert(0 && "Rerun test, malloc failed");
+	}
+	
+	//check img size and img.px ptr
+	ck_assert_int_eq(img.size_x,0);
+	ck_assert_int_eq(img.size_y,0);
+	ck_assert_ptr_ne(img.px, NULL);
+	
+	//Check negative filter doesn't crash with a 0x0 img
+	filter_negative(&img, NULL);
+	
+	ck_assert_ptr_ne(&img, NULL);
+	
+	free(img.px);
+  img.px = NULL;
 }
 END_TEST
 
@@ -492,7 +568,43 @@ START_TEST(blur_functionality) {
   struct pixel px[3][3] = {{black, black, black}, {black, white, black}, {black, black, black}};
   struct image img = {3, 3, &px};
 
-  /* TODO: Implement */
+	//Prepare the check for radius = 1
+	struct pixel dark0 = {28, 28, 28, 255};
+	struct pixel dark1 = {42, 42, 42, 255};
+	struct pixel dark2 = {63, 63, 63, 255};
+	struct pixel px_r1[3][3] = {{dark2, dark1, dark2}, {dark1, dark0, dark1}, {dark2, dark1, dark2}};
+  
+  //check for every radius
+  for(int radius = 0; radius < 4 ; radius++){
+		//duplicate img
+		struct image dupl_img = duplicate_img(img);
+		//apply blur on the copy
+		filter_blur(&dupl_img, &radius);
+		
+		//check the pixels
+			for(int x = 0; x < 3 ; x++){
+				for(int y = 0; y < 3 ; y++){
+					if(radius == 0){
+						ck_assert_int_eq(dupl_img.px[y*3+x].red, img.px[y*3+x].red);
+						ck_assert_int_eq(dupl_img.px[y*3+x].green, img.px[y*3+x].green);
+						ck_assert_int_eq(dupl_img.px[y*3+x].blue, img.px[y*3+x].blue);
+						ck_assert_int_eq(dupl_img.px[y*3+x].alpha, img.px[y*3+x].alpha);
+					} else if (radius == 1){
+						ck_assert_int_eq(dupl_img.px[y*3+x].red, px_r1[x][y].red);
+						ck_assert_int_eq(dupl_img.px[y*3+x].green, px_r1[x][y].green);
+						ck_assert_int_eq(dupl_img.px[y*3+x].blue, px_r1[x][y].blue);
+						ck_assert_int_eq(dupl_img.px[y*3+x].alpha, px_r1[x][y].alpha);
+					} else {
+						ck_assert_int_eq(dupl_img.px[y*3+x].red, dark0.red);
+						ck_assert_int_eq(dupl_img.px[y*3+x].green, dark0.green);
+						ck_assert_int_eq(dupl_img.px[y*3+x].blue, dark0.blue);
+						ck_assert_int_eq(dupl_img.px[y*3+x].alpha, dark0.alpha);
+					}
+				}
+			}
+		//free the duplicated img pixels
+		free(dupl_img.px);
+	}
 }
 END_TEST
 
@@ -501,18 +613,21 @@ END_TEST
  * all of the previous values +- 1) */
 START_TEST(blur_radius_edge_cases) {
   /* TODO: Implement */
+  ck_assert_int_eq(1,2);
 }
 END_TEST
 
 /* Verify for a random image that the transparency filter works properly */
 START_TEST(transparency_functionality) {
   /* TODO: Implement */
+  ck_assert_int_eq(1,2);
 }
 END_TEST
 
 /* Check if the function crashes when we pass nullptr as the argument */
 START_TEST(transparency_edge_case) {
   /* TODO: Implement */
+  ck_assert_int_eq(1,2);
 
 }
 END_TEST
