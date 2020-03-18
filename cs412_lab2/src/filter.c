@@ -169,7 +169,14 @@ void filter_bw(struct image *img, void *threshold_arg){
     /* Iterate over all pixels */
     for (long i = 0; i < img->size_y; i++) {
         for (long j = 0; j < img->size_x; j++) {
-            /* TODO: Implement */
+            //compute average
+            uint16_t tmp_sum = image_data[i][j].red + image_data[i][j].green + image_data[i][j].blue;
+            uint8_t avg = tmp_sum / 3;
+            uint8_t BW_pick = avg > threshold ? 255 : 0;
+            
+            image_data[i][j].red = BW_pick;
+            image_data[i][j].green = BW_pick;
+            image_data[i][j].blue = BW_pick;
         }
     }
 }
