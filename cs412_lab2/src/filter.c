@@ -148,7 +148,13 @@ void filter_sepia(struct image *img, void *depth_arg) {
     /* Iterate over all pixels */
     for (long i = 0; i < img->size_y; i++) {
         for (long j = 0; j < img->size_x; j++) {
-            /* TODO: Implement */
+            //compute average
+            uint16_t tmp_sum = image_data[i][j].red + image_data[i][j].green + image_data[i][j].blue;
+            uint8_t avg = tmp_sum / 3;
+            
+            image_data[i][j].red = 255 <= avg + 2 * depth ? 255 : avg + 2 * depth;
+            image_data[i][j].green = 255 <= avg + depth ? 255 : avg + depth;
+            image_data[i][j].blue = 255 <= avg ? 255 : avg;
         }
     }
 }
