@@ -466,8 +466,31 @@ char *grayscale_output[] = {
 };
 START_TEST(grayscale_examples) {
   double weights[] = {0.2125, 0.7154, 0.0721};
-  /* TODO: Implement */
-  ck_assert_int_eq(1,2);
+  struct image *img_in, *img_out, img_dup;
+
+  ck_assert_int_eq(load_png(grayscale_sources[_i], &img_in), 0);
+  img_dup = duplicate_img(*img_in);
+  ck_assert_int_eq(load_png(grayscale_output[_i], &img_out), 0);
+  
+  filter_grayscale(img_in, weights);
+  
+  ck_assert_uint_eq(img_in->size_x, img_out->size_x);
+  ck_assert_uint_eq(img_in->size_y, img_out->size_y);
+  
+  for(long j = 0; j < img_in->size_x * img_in->size_y; j++) {
+    ck_assert_uint_eq(img_in->px[j].red, img_out->px[j].red);
+    ck_assert_uint_eq(img_in->px[j].green, img_out->px[j].green);
+    ck_assert_uint_eq(img_in->px[j].blue, img_out->px[j].blue);
+    
+    ck_assert_uint_eq(img_in->px[j].alpha, img_dup.px[j].alpha);
+    ck_assert_uint_eq(img_out->px[j].alpha, img_dup.px[j].alpha);
+	}
+  
+  free(img_in->px);
+  free(img_in);
+  free(img_out->px);
+  free(img_out);
+  free(img_dup.px);
 }
 END_TEST
 
@@ -479,7 +502,7 @@ START_TEST(negative_functionality) {
   struct image img;
   int size_limit = 512;
   
-  srand(time(0));
+  srand(time(NULL) ^ getpid());
   
   do{  img.size_x = rand() % size_limit; } while(img.size_x == 0);
   do{  img.size_y = rand() % size_limit; } while(img.size_y == 0);
@@ -604,6 +627,7 @@ START_TEST(blur_functionality) {
 			}
 		//free the duplicated img pixels
 		free(dupl_img.px);
+		dupl_img.px=NULL;
 	}
 }
 END_TEST
@@ -612,23 +636,65 @@ END_TEST
  * for the radius (INT_MIN, INT_MAX, 0, image_width, image_height, all of the previous values divided by 2,
  * all of the previous values +- 1) */
 START_TEST(blur_radius_edge_cases) {
-  /* TODO: Implement */
-  ck_assert_int_eq(1,2);
+  srand(time(NULL) ^ getpid());
+  struct image img = generate_rand_img();
+  
+  int cnt = 0;
+  
+  int radil[5] = {INT_MIN, INT_MAX, 0, img.size_x, img.size_y};
+  
+  for (size_t i = 0 ; i < 5 ; i++){
+		int *radius = &radil[i];
+		
+		struct image dupl_img = duplicate_img(img);
+		
+		//run blur filters
+		filter_blur(&dupl_img, radius);
+		cnt++;
+		*radius=radil[i]/2;
+		filter_blur(&dupl_img, radius);
+		cnt++;
+		*radius=radil[i]+1;
+		filter_blur(&dupl_img, radius);
+		cnt++;
+		*radius=radil[i]-1;
+		filter_blur(&dupl_img, radius);
+		cnt++;
+		
+		free(dupl_img.px);
+		dupl_img.px=NULL;
+	}
+  
+  ck_assert_int_eq(cnt, 5*4);
+  
+  free(img.px);
+  img.px=NULL;
 }
 END_TEST
 
 /* Verify for a random image that the transparency filter works properly */
 START_TEST(transparency_functionality) {
-  /* TODO: Implement */
-  ck_assert_int_eq(1,2);
+  srand(time(NULL) ^ getpid());
+  struct image img = generate_rand_img();
+  
+  uint8_t transparency = rand() % (1<<8);
+  
+  filter_transparency(&img, &transparency);
+  
+  for(int x = 0; x<img.size_x ; x++){
+		for(int y = 0; y<img.size_y ; y++){
+			ck_assert_int_eq(img.px[y*img.size_x + x].alpha, transparency);
+		}
+	}
+  
+  free(img.px);
+  img.px=NULL;
 }
 END_TEST
 
 /* Check if the function crashes when we pass nullptr as the argument */
 START_TEST(transparency_edge_case) {
-  /* TODO: Implement */
-  ck_assert_int_eq(1,2);
-
+  filter_transparency(NULL, 128);
 }
 END_TEST
 
@@ -657,6 +723,7 @@ int main() {
   /* Tests for functionality */
   tcase_add_test(tc2, grayscale_functionality);
   /* TODO: Add looped test case for grayscale_examples */
+  tcase_add_loop_test(tc2, grayscale_examples, 0, sizeof(grayscale_sources) / sizeof(grayscale_sources[0]));
   tcase_add_test(tc2, negative_functionality);
   tcase_add_test(tc2, blur_functionality);
   tcase_add_test(tc2, transparency_functionality);
