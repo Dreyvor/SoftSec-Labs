@@ -227,7 +227,12 @@ void filter_keying(struct image *img, void *key_color){
     /* Iterate over all pixels */
     for (long i = 0; i < img->size_y; i++) {
         for (long j = 0; j < img->size_x; j++) {
-            /* TODO: Implement */
+            if ( image_data[i][j].red == key.red &&
+							image_data[i][j].green == key.green &&
+							image_data[i][j].blue == key.blue
+            ){
+							image_data[i][j].alpha = 0;
+						}
         }
     }
 }
