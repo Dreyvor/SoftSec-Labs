@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -g -w -O3
+#MY_CFLAGS = -g -Wall -Werror -O3
 
 all: libpngparser tests
 

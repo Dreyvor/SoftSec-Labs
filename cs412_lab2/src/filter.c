@@ -3,6 +3,10 @@
 #include "pngparser.h"
 #include <math.h>
 
+
+#define MAX(a,b) (((a)<(b))?(b):(a))
+#define MIN(a,b) (((a)<(b))?(a):(b))
+
 /* This filter iterates over the image and calculates the average value of the color channels for every pixel
  * This value is then written to all the channels to get the grayscale representation of the image
  */
@@ -150,7 +154,7 @@ void filter_sepia(struct image *img, void *depth_arg) {
         for (long j = 0; j < img->size_x; j++) {
             //compute average
             uint16_t tmp_sum = image_data[i][j].red + image_data[i][j].green + image_data[i][j].blue;
-            uint8_t avg = tmp_sum / 3;
+            uint8_t avg = tmp_sum / 3; 
             
             image_data[i][j].red = 255 <= avg + 2 * depth ? 255 : avg + 2 * depth;
             image_data[i][j].green = 255 <= avg + depth ? 255 : avg + depth;
@@ -208,14 +212,72 @@ void filter_edge_detect(struct image *img, void *threshold_arg){
     uint8_t threshold = *(uint8_t *)threshold_arg;
     double weights_x[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
     double weights_y[3][3] = {{1, 2, 1}, {0, 0, 0}, {-1, -2, -1}};
+    
+    //create a temporary img to be returned
+    struct pixel (*new_img)[img->size_x]= malloc(img->size_x * img->size_y * sizeof(struct pixel));
+    if (!new_img) {
+        printf("MEMERR: Malloc failed in filter_edge_detect. Rerun the code!\n");
+        fflush(stdout);
+        exit(1);
+    }
 
     /* Iterate over all pixels */
     for (long i = 0; i < img->size_y; i++) {
         for (long j = 0; j < img->size_x; j++) {
-            /* TODO: Implement */
+			
+			uint8_t px_alpha = image_data[i][j].alpha;
+			
+			double x_grad_rgb[3] = {0,0,0};
+			double y_grad_rgb[3] = {0,0,0};
+			
+			for (int y = 0; y < 3; y++) {		
+				for (int x = 0; x < 3; x++) {
+					long y_bounded = MAX(0, MIN(i+y-1, img->size_y-1));
+					long x_bounded = MAX(0, MIN(j+x-1, img->size_x-1));
+					
+					//compute gradients per color per axis
+					//X
+					x_grad_rgb[0] += weights_x[y][x] * image_data[y_bounded][x_bounded].red;
+					x_grad_rgb[1] += weights_x[y][x] * image_data[y_bounded][x_bounded].green;
+					x_grad_rgb[2] += weights_x[y][x] * image_data[y_bounded][x_bounded].blue;
+					
+					//Y
+					y_grad_rgb[0] += weights_y[y][x] * image_data[y_bounded][x_bounded].red;
+					y_grad_rgb[1] += weights_y[y][x] * image_data[y_bounded][x_bounded].green;
+					y_grad_rgb[2] += weights_y[y][x] * image_data[y_bounded][x_bounded].blue;
+				}
+			}
+			
+			//compute gradient per color
+			uint16_t grad_rgb[3] = {0,0,0};
+			grad_rgb[0] = sqrt(pow(x_grad_rgb[0], 2) + pow(y_grad_rgb[0], 2)); 
+			grad_rgb[1] = sqrt(pow(x_grad_rgb[1], 2) + pow(y_grad_rgb[1], 2)); 
+			grad_rgb[2] = sqrt(pow(x_grad_rgb[2], 2) + pow(y_grad_rgb[2], 2)); 
+			
+			//compute the final gradient for the pixel (j,i)
+			uint16_t grad = sqrt(pow(grad_rgb[0], 2) + pow(grad_rgb[1], 2) + pow(grad_rgb[2], 2));
+			
+			//make the decision. If grad > threshold ==> black, else white
+			if(grad > threshold){
+				new_img[i][j].red = 0;
+				new_img[i][j].green = 0;
+				new_img[i][j].blue = 0;
+			} else {
+				new_img[i][j].red = 255;
+				new_img[i][j].green = 255;
+				new_img[i][j].blue = 255;
+			}
+			
+			//set the alpha of the new_img for the pixel (j,i)
+			new_img[i][j].alpha = px_alpha;
         }
     }
-
+    //set the new_img as img to be "returned"
+    img->px = new_img;
+    
+    //free the old_image->px. We still have a pointer on it thru image_data 
+    free(image_data);
+    image_data=NULL;
 }
 
 /* This filter performs keying, replacing the color specified by the argument
@@ -228,11 +290,11 @@ void filter_keying(struct image *img, void *key_color){
     for (long i = 0; i < img->size_y; i++) {
         for (long j = 0; j < img->size_x; j++) {
             if ( image_data[i][j].red == key.red &&
-							image_data[i][j].green == key.green &&
-							image_data[i][j].blue == key.blue
+				image_data[i][j].green == key.green &&
+				image_data[i][j].blue == key.blue
             ){
-							image_data[i][j].alpha = 0;
-						}
+				image_data[i][j].alpha = 0;
+			}
         }
     }
 }

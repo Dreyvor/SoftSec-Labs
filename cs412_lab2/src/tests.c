@@ -654,19 +654,18 @@ START_TEST(blur_radius_edge_cases) {
 		 * However, it's said that we may duplicate, then I chose to do some duplications (only 5 times).
 		 */
 		filter_blur(&dupl_img, radius);
-		*radius=radil[i]/2;
+		*radius = radil[i]/2;
 		filter_blur(&dupl_img, radius);
-		*radius=radil[i]+1;
+		*radius = radil[i]+1;
 		filter_blur(&dupl_img, radius);
-		*radius=radil[i]-1;
+		*radius = radil[i]-1;
 		filter_blur(&dupl_img, radius);
 		
 		free(dupl_img.px);
-		dupl_img.px=NULL;
 	}
   
   free(img.px);
-  img.px=NULL;
+  img.px = NULL;
 }
 END_TEST
 
