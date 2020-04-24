@@ -17,7 +17,7 @@ If `load_png` return 0, then we return 1. We have to continue the execution inst
 Run the following command with `poc00.png`
 
 #### Command
-`./size poc00.png`
+`./size reports/00/poc00.png`
 
 #### Proof-of-Concept (if needed)
 `poc00.png`

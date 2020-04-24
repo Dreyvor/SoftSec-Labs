@@ -43,8 +43,8 @@ struct pixel {
  */
 
 struct image {
-    uint16_t size_x;
-    uint16_t size_y;
+    uint32_t size_x;
+    uint32_t size_y;
     struct pixel *px;
 };
 

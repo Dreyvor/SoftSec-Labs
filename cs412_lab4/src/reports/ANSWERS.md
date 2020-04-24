@@ -1,3 +1,5 @@
+# Answers
+
 1) Why did you need to change `is_png_chunk_valid`?
 
 	PNG format uses a kind of checksum called the CRC. We modified the function to avoid the reconstruction of the CRC by the fuzzer. In fact we are able to do that, but it will take more time. Thus we modified this function to tell the code that our inputs are always in a good format without the constraint of the CRC.

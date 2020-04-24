@@ -301,6 +301,7 @@ int read_png_chunk(FILE *file, struct png_chunk *chunk)
 
 error:
     if (chunk->chunk_data) free(chunk->chunk_data);
+    chunk->chunk_data = NULL;
     return 1;
 }
 
@@ -419,9 +420,11 @@ struct image *convert_color_palette_to_image(png_chunk_ihdr *ihdr_chunk, png_chu
     struct plte_entry *plte_entries = (struct plte_entry *) plte_chunk->chunk_data;
 
     struct image * img = malloc(sizeof(struct image));
+    if(!img) { goto error; }
     img->size_y = height;
     img->size_x = width;
     img->px = malloc(sizeof(struct pixel) * img->size_x * img->size_y);
+    if(!img->px) { goto error; }
 
     for (uint32_t idy = 0; idy < height; idy++) {
         // Filter byte at the start of every scanline needs to be 0
@@ -440,6 +443,16 @@ struct image *convert_color_palette_to_image(png_chunk_ihdr *ihdr_chunk, png_chu
     }
 
     return img;
+
+error:
+	if (img) {
+        if (img->px) {
+            free(img->px);
+            img->px=NULL;
+        }
+        free(img);
+        img=NULL;
+	}	
 }
 
 /* Combine image metadata and decompressed image data (RGBA) into an image */
