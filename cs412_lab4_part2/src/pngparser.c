@@ -717,7 +717,7 @@ int load_png(const char *filename, struct image **img)
         free(ihdr_chunk);
     }
 
-    if (*img) free(*img);
+    if (inflated_buf) free(inflated_buf);
 
     return 0;
 error:
@@ -745,7 +745,7 @@ error:
         free(ihdr_chunk);
     }
 
-    if (*img) free(*img);
+    if (inflated_buf) free(inflated_buf);
 
     return 1;
 }

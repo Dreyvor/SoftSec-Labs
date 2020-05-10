@@ -1,11 +1,13 @@
 #include "pngparser.h"
 #include <stdio.h>
+#include <string.h>
 
 // LibFuzzer stub
 //
 
 /*
   10.05.2020 Seems ok now
+  Don't run it. It creates many shitty files. Have fun ;)
 */
 
 int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {

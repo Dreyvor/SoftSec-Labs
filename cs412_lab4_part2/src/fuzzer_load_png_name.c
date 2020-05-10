@@ -8,7 +8,7 @@
 	10.05.2020 Seems ok now
 */
 int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-  struct image *img = NULL	;
+  struct image *img = NULL;
   int contains_00 = 0;
 
   for(int i=0; i<Size && contains_00 == 0 ; i++){
