@@ -30,6 +30,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
     store_png("test_store_rgba.png", test_img, NULL, 0);
   }
 
+  if(test_img) free(test_img);
+
   // Always return 0
   return 0;
 }

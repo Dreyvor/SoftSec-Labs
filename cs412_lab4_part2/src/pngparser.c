@@ -461,7 +461,7 @@ struct image *convert_rgb_alpha_to_image(png_chunk_ihdr *ihdr_chunk, uint8_t *in
 
     img->size_y = height;
     img->size_x = width;
-    img->px = malloc(sizeof(struct pixel) * img->size_x * img->size_y);
+        img->px = malloc(sizeof(struct pixel) * img->size_x * img->size_y);
 
     if (!img->px) {
         goto error;
@@ -933,6 +933,9 @@ int store_idat_rgb_alpha(FILE *output, struct image *img)
 
     png_chunk_idat idat = fill_idat_chunk(compressed_data_buf, compressed_length);
     store_png_chunk(output, (struct png_chunk *) &idat);
+
+    free(non_compressed_buf);
+
     return 0;
 }
 
