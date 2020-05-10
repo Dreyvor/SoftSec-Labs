@@ -11,14 +11,10 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
   //TODO: change that
   struct image *test_img = NULL;
 
-  /*
   int pid = getpid();
 
   char name[10];
   snprintf(name, 10, "%d", pid);
-  */
-
-  char *name="test_file.png";
 
   FILE *input = fopen(name,"w");
   fwrite(Data, Size, 1, input);
