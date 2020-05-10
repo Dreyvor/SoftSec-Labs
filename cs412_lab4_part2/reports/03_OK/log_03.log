@@ -1,0 +1,30 @@
+INFO: Seed: 1106839980
+INFO: Loaded 1 modules   (233 inline 8-bit counters): 233 [0x7973b0, 0x797499), 
+INFO: Loaded 1 PC tables (233 PCs): 233 [0x572768,0x5735f8), 
+INFO:       42 files found in ../seeds
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 42 min: 1b max: 4096b total: 30639b rss: 37Mb
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==25003==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7f1c868468be bp 0x000000000008 sp 0x7ffdae3d9e70 T0)
+==25003==The signal is caused by a READ memory access.
+==25003==Hint: address points to the zero page.
+    #0 0x7f1c868468bd in fwrite /build/glibc-OTsEL5/glibc-2.27/libio/iofwrite.c:35
+    #1 0x4d4546 in __interceptor_fwrite.part.51 (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x4d4546)
+    #2 0x5513ec in store_filesig /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:741:12
+    #3 0x55696b in store_png /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:1033:5
+    #4 0x54ab91 in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name.c:24:3
+    #5 0x42ebc7 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x42ebc7)
+    #6 0x4372c0 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool*) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x4372c0)
+    #7 0x4388c6 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x4388c6)
+    #8 0x43a972 in fuzzer::Fuzzer::Loop(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x43a972)
+    #9 0x429e5c in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x429e5c)
+    #10 0x41cd22 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x41cd22)
+    #11 0x7f1c867e8b96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+    #12 0x41cd99 in _start (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_name+0x41cd99)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /build/glibc-OTsEL5/glibc-2.27/libio/iofwrite.c:35 in fwrite
+==25003==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+artifact_prefix='./'; Test unit written to ./crash-a937c59dbadc20c9fe61b09c4d82e9eb090720fa

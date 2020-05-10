@@ -1,0 +1,51 @@
+INFO: Seed: 3953900153
+INFO: Loaded 1 modules   (234 inline 8-bit counters): 234 [0x796430, 0x79651a), 
+INFO: Loaded 1 PC tables (234 PCs): 234 [0x572658,0x5734f8), 
+INFO:       46 files found in ../seeds
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 46 min: 1b max: 4096b total: 34152b rss: 37Mb
+=================================================================
+==27443==ERROR: AddressSanitizer: attempting double-free on 0x619000004180 in thread T0:
+    #0 0x5120e0 in __interceptor_free.localalias.0 (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x5120e0)
+    #1 0x551010 in load_png /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:726:13
+    #2 0x54a9dd in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png.c:25:3
+    #3 0x42ebc7 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x42ebc7)
+    #4 0x4372c0 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool*) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4372c0)
+    #5 0x4388c6 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4388c6)
+    #6 0x43a972 in fuzzer::Fuzzer::Loop(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x43a972)
+    #7 0x429e5c in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x429e5c)
+    #8 0x41cd22 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x41cd22)
+    #9 0x7f7907d95b96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+    #10 0x41cd99 in _start (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x41cd99)
+
+0x619000004180 is located 0 bytes inside of 1013-byte region [0x619000004180,0x619000004575)
+freed by thread T0 here:
+    #0 0x5120e0 in __interceptor_free.localalias.0 (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x5120e0)
+    #1 0x54cbbf in read_png_chunk /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:302:9
+    #2 0x5500bc in load_png /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:592:12
+    #3 0x54a9dd in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png.c:25:3
+    #4 0x42ebc7 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x42ebc7)
+    #5 0x4372c0 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool*) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4372c0)
+    #6 0x4388c6 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4388c6)
+    #7 0x43a972 in fuzzer::Fuzzer::Loop(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x43a972)
+    #8 0x429e5c in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x429e5c)
+    #9 0x41cd22 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x41cd22)
+    #10 0x7f7907d95b96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+
+previously allocated by thread T0 here:
+    #0 0x5122b0 in __interceptor_malloc (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x5122b0)
+    #1 0x54c290 in read_png_chunk /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:277:29
+    #2 0x5500bc in load_png /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:592:12
+    #3 0x54a9dd in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png.c:25:3
+    #4 0x42ebc7 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x42ebc7)
+    #5 0x4372c0 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool*) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4372c0)
+    #6 0x4388c6 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x4388c6)
+    #7 0x43a972 in fuzzer::Fuzzer::Loop(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x43a972)
+    #8 0x429e5c in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x429e5c)
+    #9 0x41cd22 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x41cd22)
+    #10 0x7f7907d95b96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+
+SUMMARY: AddressSanitizer: double-free (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_load_png+0x5120e0) in __interceptor_free.localalias.0
+==27443==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+artifact_prefix='./'; Test unit written to ./crash-62b75112267546889e1782ff06f492db3ef6c0c5

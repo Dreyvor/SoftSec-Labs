@@ -52,7 +52,7 @@ struct image {
  * into the memory pointed to by img.
  * 
  * Please remember to free both img and img->px after you are finished using the image.
- * Please also remember to do it in the correct order :)
+ * Please also remember to do it in the csorrect order :)
  * 
  * This function returns 0 on success and a non-zero value on failure.
  */

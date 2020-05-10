@@ -298,7 +298,10 @@ int read_png_chunk(FILE *file, struct png_chunk *chunk)
     return 0;
 
 error:
-    if (chunk->chunk_data) free(chunk->chunk_data);
+    if (chunk->chunk_data) {
+        free(chunk->chunk_data);
+        chunk->chunk_data = NULL;
+    }
     return 1;
 }
 
@@ -566,7 +569,7 @@ int load_png(const char *filename, struct image **img)
     struct png_chunk *current_chunk = malloc(sizeof(struct png_chunk));
 
     // libFuzzer example bug demo:
-    //current_chunk->chunk_data = NULL;
+    current_chunk->chunk_data = NULL;
 
     FILE *input = fopen(filename, "rb");
 
@@ -673,6 +676,7 @@ int load_png(const char *filename, struct image **img)
 
             free(idat_chunk);
         }
+
     }
 
     // After we finish looping, we should have processed IEND
@@ -706,11 +710,20 @@ int load_png(const char *filename, struct image **img)
 
     if (plte_chunk) free(plte_chunk);
 
-    if (ihdr_chunk) free(ihdr_chunk);
+    if (ihdr_chunk){
+        if(ihdr_chunk->chunk_data){
+            free(ihdr_chunk->chunk_data);   
+        }
+        free(ihdr_chunk);
+    }
+
+    if (*img) free(*img);
 
     return 0;
 error:
-    fclose(input);
+    if(input){
+        fclose(input);
+    }
 
     if (deflated_buf) free(deflated_buf);
 
@@ -725,7 +738,14 @@ error:
 
     if (plte_chunk) free(plte_chunk);
 
-    if (ihdr_chunk) free(ihdr_chunk);
+    if (ihdr_chunk){
+        if(ihdr_chunk->chunk_data){
+            free(ihdr_chunk->chunk_data);
+        }
+        free(ihdr_chunk);
+    }
+
+    if (*img) free(*img);
 
     return 1;
 }
@@ -890,7 +910,7 @@ png_chunk_idat fill_idat_chunk(uint8_t *data, uint32_t length)
 // Writes an IDAT chunk from image data to a file
 int store_idat_rgb_alpha(FILE *output, struct image *img)
 {
-    uint32_t non_compressed_length = img->size_y * (1 + img->size_x * 4);
+    uint32_t non_compressed_length = img->size_y * (1 + img->size_x * 4); //TODO: too big ?
     uint8_t *non_compressed_buf = malloc(non_compressed_length);
 
     for (uint32_t id_y = 0; id_y < img->size_y; id_y++) {
@@ -1024,6 +1044,8 @@ int store_png(const char *filename, struct image *img, struct pixel *palette, ui
 {
     int result = 0;
     FILE *output = fopen(filename, "wb");
+
+    if (!output) { return 0; }
 
     store_filesig(output);
 
