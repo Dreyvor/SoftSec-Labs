@@ -1,23 +1,29 @@
-# Report BUG 00
+# Report BUG 06
 
 ### Name
-Memory Leak
+Attempting free on address which was not malloc()-ed
 
 ### Description
-The program has a memory leak (non-freed memory at the end of the execution).
+We try to free a an address that has not been malloc()-ed. This results in an error in AddressSanitizer (we used the flag "address" to compile).
 
 ### Affected Lines
-`pngparser.c:711` and `pngparser.c:730`
+`pngparser.c:953-954`
 
 ### Expected vs Observed
-We expect to have no memory leaks. We observe that there is a memory leak on the `*img` in `load_png(...)`
+We observe a try to free an address that has not been allocated before. We expect to not attemping to free an address that has not been allocated.
+In fact if we encounter a `pixel` which is not in `palette`, we `go to error` in `pngparser.c:946`. We still have not initialized `compressed_data_buf`
+thus its value can be not `NULL` and we will try to free it in `error` (`pngparser.c:963-964`).
 
 ### Steps to reproduce
 #### Command
-`./fuzzer_load_png leak_00`
+`./fuzzer_store_png_palette -detect_leaks=0 ../reports/06/crash_06`
 
 #### Proof-of-Concept (if needed)
-`leak_00`
+`crash_06`
 
 ### Suggested Fix Description
-Add `if (*img) free(*img);` before `pngparser.c:711` and `pngparser.c:730`
+Move `pngparser.c:953-954` after `pngparser.c:937`. Concerned lines:
+```
+uint8_t * compressed_data_buf = NULL;
+uint32_t compressed_length;
+```

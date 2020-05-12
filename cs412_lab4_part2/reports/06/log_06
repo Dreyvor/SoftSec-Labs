@@ -1,0 +1,37 @@
+INFO: Seed: 3345059198
+INFO: Loaded 1 modules   (242 inline 8-bit counters): 242 [0x7973f0, 0x7974e2), 
+INFO: Loaded 1 PC tables (242 PCs): 242 [0x573358,0x574278), 
+INFO:        2 files found in ../seeds/
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 2 min: 287b max: 1070b total: 1357b rss: 37Mb
+#3  INITED cov: 2 ft: 2 corp: 1/287b exec/s: 0 rss: 37Mb
+#5  REDUCE cov: 2 ft: 2 corp: 1/264b exec/s: 0 rss: 37Mb L: 264/264 MS: 2 ChangeByte-EraseBytes-
+#6  REDUCE cov: 2 ft: 2 corp: 1/164b exec/s: 0 rss: 37Mb L: 164/164 MS: 1 EraseBytes-
+#16 REDUCE cov: 2 ft: 2 corp: 1/125b exec/s: 0 rss: 37Mb L: 125/125 MS: 5 InsertByte-CMP-InsertByte-ChangeBinInt-EraseBytes- DE: "\x01\x00\x00\x00\x00\x00\x00\x00"-
+#22 REDUCE cov: 2 ft: 2 corp: 1/94b exec/s: 0 rss: 38Mb L: 94/94 MS: 1 EraseBytes-
+#36 REDUCE cov: 2 ft: 2 corp: 1/84b exec/s: 0 rss: 38Mb L: 84/84 MS: 4 ChangeByte-ShuffleBytes-ChangeBit-EraseBytes-
+#50 REDUCE cov: 2 ft: 2 corp: 1/69b exec/s: 0 rss: 38Mb L: 69/69 MS: 4 ChangeBit-ChangeByte-CMP-EraseBytes- DE: "\x01\x00\x00\x00"-
+#78 REDUCE cov: 2 ft: 2 corp: 1/63b exec/s: 0 rss: 38Mb L: 63/63 MS: 3 ChangeByte-ShuffleBytes-EraseBytes-
+=================================================================
+==18352==ERROR: AddressSanitizer: attempting free on address which was not malloc()-ed: 0x7ffc66b16a87 in thread T0
+    #0 0x5120e0 in __interceptor_free.localalias.0 (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x5120e0)
+    #1 0x556701 in store_idat_plte /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:987:9
+    #2 0x557183 in store_png_palette /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:1031:5
+    #3 0x5574ff in store_png /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/pngparser.c:1056:9
+    #4 0x54b1bf in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette.c:42:2
+    #5 0x42ebc7 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x42ebc7)
+    #6 0x439434 in fuzzer::Fuzzer::MutateAndTestOne() (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x439434)
+    #7 0x43aa9f in fuzzer::Fuzzer::Loop(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, fuzzer::fuzzer_allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x43aa9f)
+    #8 0x429e5c in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x429e5c)
+    #9 0x41cd22 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x41cd22)
+    #10 0x7fe32216fb96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+    #11 0x41cd99 in _start (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x41cd99)
+
+Address 0x7ffc66b16a87 is located in stack of thread T0
+SUMMARY: AddressSanitizer: bad-free (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/cs412_lab4_part2/src/fuzzer_store_png_palette+0x5120e0) in __interceptor_free.localalias.0
+==18352==ABORTING
+MS: 2 ChangeBinInt-PersAutoDict- DE: "\x01\x00\x00\x00\x00\x00\x00\x00"-; base unit: f673ddcaaae80ee0c41571e551218015e47d47db
+0x89,0x1,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x50,0x4e,0x1a,0x47,0xd,0xa,0xb,0x0,0x28,0x0,0xd,0x49,0xb4,0xbb,0xf5,0xa3,0xf8,0x32,0x12,0xa9,0x23,0x93,0x47,0x75,0x8c,0xf5,0x3c,0xeb,0x59,0xd2,0x58,0xd2,0x97,0x28,0x5d,0x8a,0x81,0xb4,0x6,0x53,0x9f,0x1,0x0,0x0,0x0,0x1d,0x18,0x28,0xfe,0x9c,0xe0,0x7f,0x86,0xd3,0x13,0x89,0x0,0x7b,0x9f,0x42,0x60,0x82,
+\x89\x01\x00\x00\x00\x00\x00\x00\x00PN\x1aG\x0d\x0a\x0b\x00(\x00\x0dI\xb4\xbb\xf5\xa3\xf82\x12\xa9#\x93Gu\x8c\xf5<\xebY\xd2X\xd2\x97(]\x8a\x81\xb4\x06S\x9f\x01\x00\x00\x00\x1d\x18(\xfe\x9c\xe0\x7f\x86\xd3\x13\x89\x00{\x9fB`\x82
+artifact_prefix='./'; Test unit written to ./crash-2b48e017b25f206ad61d0696da9e153da569e226
+Base64: iQEAAAAAAAAAUE4aRw0KCwAoAA1JtLv1o/gyEqkjk0d1jPU861nSWNKXKF2KgbQGU58BAAAAHRgo/pzgf4bTE4kAe59CYII=

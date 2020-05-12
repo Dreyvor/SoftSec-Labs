@@ -959,6 +959,9 @@ int store_idat_plte(FILE *output, struct image *img, struct pixel *palette, uint
     uint32_t non_compressed_length = img->size_y * (1 + img->size_x);
     uint8_t *non_compressed_buf = malloc(non_compressed_length);
 
+    uint8_t * compressed_data_buf = NULL;
+    uint32_t compressed_length;
+
     for (uint32_t id_y = 0; id_y < img->size_y; id_y++) {
         non_compressed_buf[id_y * (1 + img->size_x)] = 0;
         for (uint32_t id_x = 0; id_x < img->size_x; id_x++) {
@@ -972,9 +975,6 @@ int store_idat_plte(FILE *output, struct image *img, struct pixel *palette, uint
 
         }
     }
-
-    uint8_t * compressed_data_buf = NULL;
-    uint32_t compressed_length;
 
     compress_png_data(non_compressed_buf, non_compressed_length, &compressed_data_buf, &compressed_length);
 
