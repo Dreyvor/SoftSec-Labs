@@ -22,7 +22,7 @@ However it creates a file with a strange filename.
 `./fuzzer_store_png_name -detect_leaks=0 ../reports/03/crash_03`
 
 #### Proof-of-Concept (if needed)
-crash_03
+`crash_03`
 
 ### Suggested Fix Description
 Simply add `if (!output) { return 0; }` after the file opening in `pngparser.c:1026`

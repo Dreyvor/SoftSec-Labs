@@ -17,7 +17,7 @@ We expect to exit nicely and no double free. We observe a double free.
 `./fuzzer_load_png -detect_leaks=0 ../reports/02/crash_02`
 
 #### Proof-of-Concept (if needed)
-crash_02
+`crash_02`
 
 ### Suggested Fix Description
 Simply add `chunk->chunk_data = NULL;` after `pngparser.c:301`

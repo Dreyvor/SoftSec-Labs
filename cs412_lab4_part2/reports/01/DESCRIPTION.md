@@ -1,5 +1,10 @@
 # Report BUG 01
 
+## Note
+This bug appears after you solved the `BUG_02`. Hence you have to apply the suggested fix for `BUG_02` and then read this one.
+
+---
+
 ### Name
 Memory Leak
 
