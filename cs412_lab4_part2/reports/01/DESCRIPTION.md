@@ -19,7 +19,7 @@ We expect to have no memory leaks. We observe that there is a memory leak on the
 
 ### Steps to reproduce
 #### Command
-`./fuzzer_load_png leak_01`
+`./fuzzer_load_png ../reports/01/leak_01`
 
 #### Proof-of-Concept (if needed)
 `leak_01`
