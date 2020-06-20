@@ -1,7 +1,8 @@
 ### Edit this variable to add new compiler flags (sanitizers, debugging, etc...)
-#EXTRA_FLAGS := -Wall -Wextra
-EXTRA_FLAGS := -Wall -Wextra -fsanitize-trap=all -fsanitize=fuzzer,address,undefined
-CXX			:= clang++
+EXTRA_FLAGS := -Wall -Wextra -g
+#EXTRA_FLAGS := -Wall -Wextra -fsanitize-trap=all -fsanitize=fuzzer,address,undefined
+#CXX			:= clang++
+CXX			:= afl-g++
 
 ###################################
 ### DO NOT EDIT BELOW THIS LINE ###

@@ -1,12 +1,16 @@
-#include "re.h"
-#include <stdint.h>
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string>
+//#include <string.h>
+#include <stdint.h>
+#include "re.h"
 
 extern "C"
 
-
 int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 {
+
     /**
      * The regex engine is comprised of two components:
      * - the parser
@@ -50,7 +54,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	size_t size_regex = 128;
 
-	if(Size < size_regex){ return 0; }
+	if(Size < size_regex){ return 1; }
 
 	int err = 0;
 
@@ -60,3 +64,65 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	return 0;
 }
+
+int main(int argc, char **argv) {
+  fprintf(stderr, "StandaloneFuzzTargetMain: running %d inputs\n", argc - 1);
+
+  int ret = 0;
+
+  for (int i = 1; i < argc; i++) {
+    fprintf(stderr, "Running: %s\n", argv[i]);
+    FILE *f = fopen(argv[i], "r");
+    assert(f);
+    fseek(f, 0, SEEK_END);
+    size_t len = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    unsigned char *buf = (unsigned char*)malloc(len);
+    size_t n_read = fread(buf, 1, len, f);
+    fclose(f);
+    assert(n_read == len);
+    
+    //MY STUB
+
+    ret = LLVMFuzzerTestOneInput(buf, len);
+
+    //END OF MY STUB
+
+    free(buf);
+    fprintf(stderr, "Done:    %s: (%zd bytes)\n", argv[i], n_read);
+  }
+  return ret;
+}
+
+
+
+
+
+
+
+/*#include "re.h"
+#include <stdint.h>
+#include <string>
+#include <string.h>
+
+extern "C"
+*/
+
+
+
+
+//############################
+
+/*int main(int argc, char const *argv[])
+{
+	if (argc != 3){ return 1; }
+
+	const uint8_t * data = (const uint8_t *) argv[1];
+	size_t size = (size_t) argv[2];
+
+	if(size < 128){ return 1; }
+
+	LLVMFuzzerTestOneInput(data, size);
+
+	return 0;
+}*/
