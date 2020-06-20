@@ -1,0 +1,1 @@
+[AEIOUaeiou]{3} ho hi mark!

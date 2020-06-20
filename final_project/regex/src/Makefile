@@ -1,5 +1,6 @@
 ### Edit this variable to add new compiler flags (sanitizers, debugging, etc...)
-EXTRA_FLAGS := -Wall -Wextra
+#EXTRA_FLAGS := -Wall -Wextra
+EXTRA_FLAGS := -Wall -Wextra -fsanitize-trap=all -fsanitize=fuzzer,address,undefined
 CXX			:= clang++
 
 ###################################

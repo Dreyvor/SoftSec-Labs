@@ -3,6 +3,8 @@
 #include <string>
 
 extern "C"
+
+
 int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 {
     /**
@@ -45,4 +47,16 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
      *   your fuzzing process as it only encounters crashes for the remaining
      *   bugs.
      */
+
+	size_t size_regex = 128;
+
+	if(Size < size_regex){ return 0; }
+
+	int err = 0;
+
+	RegularExpression* regex = parse((const char *)Data, size_regex, &err);
+	//std::tuple<int, int> result = SearchExpression(regex).search((const char *) &Data[128], Size - size_regex);
+	SearchExpression(regex).search((const char *) (Data + size_regex), Size - size_regex);
+
+	return 0;
 }
