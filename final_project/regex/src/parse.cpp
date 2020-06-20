@@ -235,7 +235,7 @@ error:
         delete head;
         head = nullptr;
     }
-    if (next != nullptr) {
+    else if (next != nullptr) {
         delete next;
         next = nullptr;
     }
