@@ -44,13 +44,20 @@ Only do the second switch (i.e. `parse.cpp:164`) if `ltmp > 0`. Add `if(ltmp > 0
 
 ---
 
-### Bug 3: NAME
+### Bug 3: Failed assert
 
 #### Description (2 points)
+In `LazyRepeatRangeExpression.cpp:26`, `mlen_regex` is set to `1` if the "regex element" (e.g. `LiteralExpression`) matches the string and to `-1` otherwise.
+Knowing that, in `LazyRepeatRangeExpression.cpp:29` we can simply add `mlen_regex` to `mlen` instead of `mlen_regex + 1`.
 
 #### Proof of Concept (1 point)
+`BUG_03` is located in `regex/poc` folder
 
 #### Suggested Fix (1 point)
+Replace `LazyRepeatRangeExpression.cpp:29` by
+```c++
+mlen += mlen_regex;
+```
 
 ---
 

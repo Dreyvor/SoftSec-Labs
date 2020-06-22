@@ -54,7 +54,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	size_t size_regex = 128;
 
-	if(Size < size_regex){ return 0; }
+	if(Size < size_regex){ return 1; } // TODO : AFL 1 vs LibFuzzer 0
 
 	int err = 0;
 
@@ -70,7 +70,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	return 0;
 }
-/*
+
 int main(int argc, char **argv) {
   fprintf(stderr, "StandaloneFuzzTargetMain: running %d inputs\n", argc - 1);
 
@@ -99,36 +99,3 @@ int main(int argc, char **argv) {
   }
   return ret;
 }
-*/
-
-
-
-
-
-
-/*#include "re.h"
-#include <stdint.h>
-#include <string>
-#include <string.h>
-
-extern "C"
-*/
-
-
-
-
-//############################
-
-/*int main(int argc, char const *argv[])
-{
-	if (argc != 3){ return 1; }
-
-	const uint8_t * data = (const uint8_t *) argv[1];
-	size_t size = (size_t) argv[2];
-
-	if(size < 128){ return 1; }
-
-	LLVMFuzzerTestOneInput(data, size);
-
-	return 0;
-}*/

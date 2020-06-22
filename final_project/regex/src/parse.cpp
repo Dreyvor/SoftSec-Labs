@@ -161,8 +161,7 @@ static RegularExpression * _parse_internal(const char ** str, size_t *len, int d
         }
 
         // Check for repetitions but only if ltmp > 0
-        if(ltmp > 0){
-            switch (*stmp) {
+        if(ltmp > 0){ switch (*stmp) {
             case '{':
                 if (next != nullptr && (temp = try_parse_range(&stmp, &ltmp, next)) != nullptr) {
                     next = temp;
@@ -212,8 +211,7 @@ static RegularExpression * _parse_internal(const char ** str, size_t *len, int d
                 break;
             default:
                 break;
-            }
-        }
+            }}
 
         if (head == nullptr) {
             head = next;

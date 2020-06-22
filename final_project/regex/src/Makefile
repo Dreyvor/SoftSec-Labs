@@ -1,12 +1,12 @@
 ### Edit this variable to add new compiler flags (sanitizers, debugging, etc...)
 
 #FOR AFL: use below with return 1 on size too small
-#EXTRA_FLAGS := -Wall -Wextra -g
-#CXX			:= afl-g++
+EXTRA_FLAGS := -Wall -Wextra -g
+CXX			:= afl-g++
 
 #FOR LibFuzzer: use below with return 0 on size too small
-EXTRA_FLAGS := -Wall -Wextra -fsanitize-trap=all -fsanitize=fuzzer,address,undefined,integer -g
-CXX			:= clang++
+#EXTRA_FLAGS := -Wall -Wextra -fsanitize-trap=all -fsanitize=fuzzer,address,undefined,integer -g
+#CXX			:= clang++
 
 ###################################
 ### DO NOT EDIT BELOW THIS LINE ###
