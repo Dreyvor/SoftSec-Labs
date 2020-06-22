@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-//#include <string.h>
+#include <string.h>
 #include <stdint.h>
 #include "re.h"
 
@@ -54,17 +54,23 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	size_t size_regex = 128;
 
-	if(Size < size_regex){ return 1; }
+	if(Size < size_regex){ return 0; }
 
 	int err = 0;
 
-	RegularExpression* regex = parse((const char *)Data, size_regex, &err);
-	//std::tuple<int, int> result = SearchExpression(regex).search((const char *) &Data[128], Size - size_regex);
-	SearchExpression(regex).search((const char *) (Data + size_regex), Size - size_regex);
+    char *regex_txt = (char*) malloc(size_regex);
+    memcpy(regex_txt, Data, size_regex);
+
+	RegularExpression* regex = parse(regex_txt, size_regex, &err);
+    if(err == 0){
+	   SearchExpression(regex).search((const char *) (Data + size_regex), Size - size_regex);
+    }
+
+    free(regex_txt);
 
 	return 0;
 }
-
+/*
 int main(int argc, char **argv) {
   fprintf(stderr, "StandaloneFuzzTargetMain: running %d inputs\n", argc - 1);
 
@@ -93,7 +99,7 @@ int main(int argc, char **argv) {
   }
   return ret;
 }
-
+*/
 
 
 

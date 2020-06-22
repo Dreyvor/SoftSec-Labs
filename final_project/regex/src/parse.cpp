@@ -160,57 +160,59 @@ static RegularExpression * _parse_internal(const char ** str, size_t *len, int d
             break;
         }
 
-        // Check for repetitions
-        switch (*stmp) {
-        case '{':
-            if (next != nullptr && (temp = try_parse_range(&stmp, &ltmp, next)) != nullptr) {
-                next = temp;
-            } // else, treat the opening brackets as literal in the next iteration
-            break;
-        case '*':
-            if (next == nullptr) {
-                *err = -2; // repetition modifier not preceded by expression
-                goto error;
-            }
-            stmp++; ltmp--; // consume the '*' modifier
-            if (ltmp == 0 || *stmp != '?') {
-                next = new RepeatRangeExpression(next, 0, UINT_MAX);
-            }
-            else {
+        // Check for repetitions but only if ltmp > 0
+        if(ltmp > 0){
+            switch (*stmp) {
+            case '{':
+                if (next != nullptr && (temp = try_parse_range(&stmp, &ltmp, next)) != nullptr) {
+                    next = temp;
+                } // else, treat the opening brackets as literal in the next iteration
+                break;
+            case '*':
+                if (next == nullptr) {
+                    *err = -2; // repetition modifier not preceded by expression
+                    goto error;
+                }
+                stmp++; ltmp--; // consume the '*' modifierdsa
+                if (ltmp == 0 || *stmp != '?') {
+                    next = new RepeatRangeExpression(next, 0, UINT_MAX);
+                }
+                else {
+                    stmp++; ltmp--; // consume the '?' modifier
+                    next = new LazyRepeatRangeExpression(next, 0, UINT_MAX);
+                }
+                break;
+            case '+':
+                if (next == nullptr) {
+                    *err = -2; // repetition modifier not preceded by expression
+                    goto error;
+                }
+                stmp++; ltmp--; // consume the '+' modifier
+                if (ltmp == 0 || *stmp != '?') {
+                    next = new RepeatRangeExpression(next, 1, UINT_MAX);
+                }
+                else {
+                    stmp++; ltmp--; // consume the '?' modifier
+                    next = new LazyRepeatRangeExpression(next, 1, UINT_MAX);
+                }
+                break;
+            case '?':
+                if (next == nullptr) {
+                    *err = -2; // repetition modifier not preceded by expression
+                    goto error;
+                }
                 stmp++; ltmp--; // consume the '?' modifier
-                next = new LazyRepeatRangeExpression(next, 0, UINT_MAX);
+                if (ltmp == 0 || *stmp != '?') {
+                    next = new RepeatRangeExpression(next, 0, 1);
+                }
+                else {
+                    stmp++; ltmp--; // consume the '?' modifier
+                    next = new LazyRepeatRangeExpression(next, 0, 1);
+                }
+                break;
+            default:
+                break;
             }
-            break;
-        case '+':
-            if (next == nullptr) {
-                *err = -2; // repetition modifier not preceded by expression
-                goto error;
-            }
-            stmp++; ltmp--; // consume the '+' modifier
-            if (ltmp == 0 || *stmp != '?') {
-                next = new RepeatRangeExpression(next, 1, UINT_MAX);
-            }
-            else {
-                stmp++; ltmp--; // consume the '?' modifier
-                next = new LazyRepeatRangeExpression(next, 1, UINT_MAX);
-            }
-            break;
-        case '?':
-            if (next == nullptr) {
-                *err = -2; // repetition modifier not preceded by expression
-                goto error;
-            }
-            stmp++; ltmp--; // consume the '?' modifier
-            if (ltmp == 0 || *stmp != '?') {
-                next = new RepeatRangeExpression(next, 0, 1);
-            }
-            else {
-                stmp++; ltmp--; // consume the '?' modifier
-                next = new LazyRepeatRangeExpression(next, 0, 1);
-            }
-            break;
-        default:
-            break;
         }
 
         if (head == nullptr) {

@@ -1,0 +1,60 @@
+INFO: Seed: 3925649680
+INFO: Loaded 1 modules   (335 inline 8-bit counters): 335 [0x7a1a10, 0x7a1b5f), 
+INFO: Loaded 1 PC tables (335 PCs): 335 [0x57aea0,0x57c390), 
+./build/bin/fuzz: Running 1 inputs 1 time(s) each.
+Running: crash-21fb37d610ba2295b07543aa0471fb84e9653f6e
+=================================================================
+==6624==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60c000000240 at pc 0x000000552f25 bp 0x7fffffffb690 sp 0x7fffffffb688
+READ of size 1 at 0x60c000000240 thread T0
+    #0 0x552f24 in _parse_internal(char const**, unsigned long*, int, int*) /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/parse.cpp:164:17
+    #1 0x551834 in parse(char const*, unsigned long, int*) /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/parse.cpp:255:12
+    #2 0x54f2ee in LLVMFuzzerTestOneInput /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/fuzz.cpp:61:29
+    #3 0x42f037 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x42f037)
+    #4 0x41f4ca in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x41f4ca)
+    #5 0x42a490 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x42a490)
+    #6 0x41d192 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x41d192)
+    #7 0x7ffff6a9bb96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+    #8 0x41d209 in _start (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x41d209)
+
+0x60c000000240 is located 0 bytes to the right of 128-byte region [0x60c0000001c0,0x60c000000240)
+allocated by thread T0 here:
+    #0 0x54ae90 in operator new[](unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x54ae90)
+    #1 0x42ef4e in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x42ef4e)
+    #2 0x41f4ca in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x41f4ca)
+    #3 0x42a490 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x42a490)
+    #4 0x41d192 in main (/media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/build/bin/fuzz+0x41d192)
+    #5 0x7ffff6a9bb96 in __libc_start_main /build/glibc-OTsEL5/glibc-2.27/csu/../csu/libc-start.c:310
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /media/brad/HDD_1TB_intern/EPFL/SYSCOM/MA01/SoftSec/Labs/SoftSec-Labs/final_project/regex/src/parse.cpp:164:17 in _parse_internal(char const**, unsigned long*, int, int*)
+Shadow bytes around the buggy address:
+  0x0c187fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c187fff8000: fa fa fa fa fa fa fa fa 00 00 00 00 00 00 00 00
+  0x0c187fff8010: 00 00 00 00 00 00 00 fa fa fa fa fa fa fa fa fa
+  0x0c187fff8020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c187fff8030: fa fa fa fa fa fa fa fa 00 00 00 00 00 00 00 00
+=>0x0c187fff8040: 00 00 00 00 00 00 00 00[fa]fa fa fa fa fa fa fa
+  0x0c187fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c187fff8060: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c187fff8070: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c187fff8080: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c187fff8090: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==6624==ABORTING

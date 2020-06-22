@@ -1,1 +1,1 @@
-t[wo]o my suppertext53128
+^t[wo]o?(padding)+(padding)*(pad){34}(pad)??(pad)+?(pad)*?.\42[1-9]$ my suppertext53128
