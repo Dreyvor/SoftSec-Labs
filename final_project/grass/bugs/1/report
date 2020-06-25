@@ -1,21 +1,37 @@
 Q1. What class of bug are you reporting?                            [1 point]
+	Input non-sanitized --> Arbitrary code execution
 ___
 
 Q2. Describe the bug:                              [3 points = 0.5 + 0.5 + 2]
 a) Where is the bug?
-File, line: ___
-Function: ___
+	File, line: command.cpp:134
+	Function: lsCommand::exec
+___
 
-b) What capabilities does the bug give to the attacker? 
+b) What capabilities does the bug give to the attacker?
+	Arbitrary code execution
 ___
 
 c) What are the conditions under which the bug can be exploited, and describe
 your exploit? 
+	The user need to be logged in. After that, the user has to:
+	1.	create a folder named "rnd;$COMMAND#" (i.e. 'mkdir rnd;$COMMAND#')
+	2.	go in this directory (i.e. 'cd rnd;$COMMAND#')
+	3.	run the command 'ls'
+
+	This causes command.cpp:134 to run the command
+	'ls -l rnd;$COMMAND# >> $TMPDIR 2>&1'
+	which leads to
+	'ls -l rnd; $COMMAND'
+	are allows the user to run whatever he wants to.
+
 ___
 
 Q3. Describe the fix for the bug:                       [2 points = 0.5 + 1.5]
 a) Can the vulnerability be mitigated through automated techniques?    
    If yes, explain.
+
+   TODO
 ___
 
 b) Describe a code-fix for the bug. This must correspond to the submitted patch.
