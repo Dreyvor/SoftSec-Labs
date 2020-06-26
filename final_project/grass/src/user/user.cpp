@@ -85,7 +85,7 @@ void UserState::getUser(string &name) {
 
 void UserState::makeUserFile() {
   char buf[128];
-  sprintf(buf, "%s/%sXXXXXX", USERS_FILE_DIR, userName.c_str()); //TODO : HERE WE DON'T CHECK THE SIZE FOR THE COPY!
+  sprintf(buf, "%s/%sXXXXXX", USERS_FILE_DIR, userName.c_str());
   /* Create users file if it does not exist */
   int userFileFD = mkstemp(buf);
   assert (userFileFD != -1);

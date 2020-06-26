@@ -1,0 +1,28 @@
+diff -ru src_original/commands/command.cpp src/commands/command.cpp
+--- src_original/commands/command.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/commands/command.cpp	2020-06-26 15:34:27.816277983 +0200
+@@ -8,6 +8,7 @@
+ #include <linux/limits.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <regex>
+ 
+ #include "inc/services/threadpool.hpp"
+ #include "inc/server/server.hpp"
+@@ -93,6 +94,16 @@
+     return 0;
+   }
+ 
++  //Only accept valid IP
++  std::regex ip_regex("^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$");
++  if(!std::regex_match(args[0].c_str(), ip_regex)){
++    result.append(ERROR_STR "The IP ipv4 format is not respected\n");
++    result.append("You gave me: ");
++    result.append(args[0].c_str());
++    result.append("\n");
++    return 0;
++  }
++
+   char cmd[PATH_MAX];
+   snprintf(cmd, PATH_MAX, "ping %s -c 1 >> %15s 2>&1", args[0].c_str(), tmpName);
+   /* Ping success value is zero */

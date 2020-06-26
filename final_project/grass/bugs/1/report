@@ -4,7 +4,7 @@ ___
 
 Q2. Describe the bug:                              [3 points = 0.5 + 0.5 + 2]
 a) Where is the bug?
-	File, line: command.cpp:134
+	File, line: command.cpp:134-135
 	Function: lsCommand::exec
 ___
 
@@ -31,9 +31,14 @@ Q3. Describe the fix for the bug:                       [2 points = 0.5 + 1.5]
 a) Can the vulnerability be mitigated through automated techniques?    
    If yes, explain.
 
-   TODO
+   No we cannot use automatic techniques. We must code differently to sanitize the user's inputs (as given in the patch).
 ___
 
 b) Describe a code-fix for the bug. This must correspond to the submitted patch.
-___
 
+	For this bug we chose to allow only the user to create folder that has 
+	* alphanumerical characters (i.e. [a-zA-Z0-9])
+	* others special characters (i.e. [_.\\-()])
+	If the folder name is valid, then execute the 'mkdir' command. Otherwise,
+	we do not execute the 'mkdir' command and warns the user.
+___

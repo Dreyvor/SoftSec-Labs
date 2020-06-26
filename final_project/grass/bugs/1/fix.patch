@@ -1,0 +1,27 @@
+diff -ru src_original/commands/command.cpp src/commands/command.cpp
+--- src_original/commands/command.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/commands/command.cpp	2020-06-26 16:11:35.992882106 +0200
+@@ -8,6 +8,7 @@
+ #include <linux/limits.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <regex>
+ 
+ #include "inc/services/threadpool.hpp"
+ #include "inc/server/server.hpp"
+@@ -218,6 +219,15 @@
+   if (args[0][args[0].size() - 1] == '/')
+     args[0] = args[0].substr(0, args[0].size() - 1);
+ 
++  //Regex to validate the directory name
++  std::regex folder_regex("^[a-zA-Z0-9_.\\-()]+$");
++  if(!std::regex_match(args[0], folder_regex)){
++    result.append(ERROR_STR "The folder name given is not valid. Use only alphanumeric characters and '_.-()'" "\n");
++    return 0;
++  }
++
++
++
+   char buf[PATH_MAX];
+   memset(buf, 0, PATH_MAX);
+   string destination = state.curDir + "/" + args[0];

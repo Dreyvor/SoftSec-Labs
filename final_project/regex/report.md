@@ -61,20 +61,36 @@ mlen += mlen_regex;
 
 ---
 
-### Bug 4: NAME
+### Bug 4: Really long hang
 
 #### Description (2 points)
+The code hangs during a really long time which is not a normal behaviour. The input given is filled with a **lot** of `+` and `*`.
 
 #### Proof of Concept (1 point)
+`BUG_04` is located in `regex/poc` folder
 
 #### Suggested Fix (1 point)
+Sadly, we did not found any fix for this one
 
 ---
 
-### Bug 5: NAME
+### Bug 5: Malloc too big
 
 #### Description (2 points)
+The problem occurs when the repetition of a pattern is too big (i.e. `(pattern){$BIG_NUMBER}`). The malloc occurs in `parse.cpp:96` (i.e. The code tries to allocate too much memory). Thus, it receives a `SIGKILL` error which kill the execution of the program (after some laggy mouse pointer).
 
 #### Proof of Concept (1 point)
+`BUG_05` is located in `regex/poc` folder
 
 #### Suggested Fix (1 point)
+Use a boundary to limit the number of maximum repetition in the constructor of `RepeatNExpression`. It could be something like:
+* At the beginning of the file `RegularExpression.h`
+```c++
+#define MAX_REPEAT 500
+```
+* After `RegularExpression.cpp:7`:
+```c++
+if (N > MAX_REPEAT){
+	exit(1);
+}
+```

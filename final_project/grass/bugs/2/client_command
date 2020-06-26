@@ -2,5 +2,5 @@ login u1
 pass p1
 mkdir rnd;whoami;grassexternal.py&#
 cd rnd;whoami;grassexternal.py&#
-ls
+grep neverReached
 exit

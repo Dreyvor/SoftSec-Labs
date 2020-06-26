@@ -21,7 +21,7 @@ def pull_image():
 def get_docker_base_cmd(args = []):
   cwd = os.getcwd()
   uid = os.getuid()
-  docker_base_cmd = ['docker', 'run'] + args + ['--name=grass', '--cap-add=SYS_PTRACE', '-e', 'GRASS_ROOT=/grass', '-v', cwd + ':/grass', 'atrib/grass:latest', str(uid), '--']
+  docker_base_cmd = ['docker', 'run'] + args + ['--security-opt','seccomp=unconfined', '--name=grass', '--cap-add=SYS_PTRACE', '-e', 'GRASS_ROOT=/grass', '-v', cwd + ':/grass', 'atrib/grass:latest', str(uid), '--']
 
   return docker_base_cmd
 
