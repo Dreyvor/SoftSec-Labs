@@ -1,0 +1,37 @@
+Q1. What class of bug are you reporting?                            [1 point]
+	Stack-buffer-overflow
+___
+
+Q2. Describe the bug:                              [3 points = 0.5 + 0.5 + 2]
+a) Where is the bug?
+	File, line: user.cpp:87-88
+	Function: UserState::makeUserFile
+
+b) What capabilities does the bug give to the attacker? 
+	This bug allows a control-flow-hijacking. The attacker could perform a stack-buffer-overflow to overwrite the return address of the 'UserState::makeUserFile' function. At this point the attacker might use a ROPchain to open a shell and escape the process running on the server.
+___
+
+c) What are the conditions under which the bug can be exploited, and describe
+your exploit?
+	It must exist a user with a username bigger than 128 characters to perform the buffer overflow. However we did not success on the exploitation of this bug (we manage to crash the server with a 'SIGSEGV 11' error but no exploitation).
+
+	The exploit should overwrite the return address of the function 'UserState::makeUserFile' by '0x11120780' which is the address of the 'hijack_flow' function.
+___
+
+Q3. Describe the fix for the bug:                       [2 points = 0.5 + 1.5]
+a) Can the vulnerability be mitigated through automated techniques?    
+   If yes, explain.
+
+   Yes, this can be mitigated using ASLR and stack-canaries. This will still be possible (according to the theory seen this semester).
+   However, we chose to fix the problem directly in the code through the patch.
+___
+
+b) Describe a code-fix for the bug. This must correspond to the submitted patch.
+	
+	We fixed this problem by replacing the 'sprintf' by a 'snprintf' which copy a fixed number of elements to the fixed size buffer 'buf' in 'user.cpp:87-88'.
+
+	The method causes a crash at the assert right after in the same function (i.e. 'UserState::makeUserFile'). It causes a crashes with a SIGSEGV 6.
+
+	This is due to the fact that 'mkstemp(ex4)' needs the string 'ex4' to terminates by 6 'X'. It is not the case due to our 'snprintf' and the too big username. Then, the assert fails.
+___
+

@@ -1,0 +1,21 @@
+diff -ru src_original/commands/command.cpp src/commands/command.cpp
+--- src_original/commands/command.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/commands/command.cpp	2020-06-26 18:33:27.731219592 +0200
+@@ -368,9 +368,14 @@
+ 
+   int putFilesize = atoi(args[1].c_str());
+   volatile int *putPortPtr = &state.putPort;
+-  ThreadPool::run([putFilename, putFilesize, putPortPtr] {
+-    Server::putFile(putFilename, putFilesize, putPortPtr);
+-  });
++  try{
++    ThreadPool::run([putFilename, putFilesize, putPortPtr] {
++      Server::putFile(putFilename, putFilesize, putPortPtr);
++    });
++  } catch (...){
++    result.append(ERROR_STR "The user has a problem with the put command (too much usage of this one?)\n");
++    return 0;
++  }
+ 
+   /* Wait until putfile writes the port number and file size */
+   while (state.putPort == 0);

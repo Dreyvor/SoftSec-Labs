@@ -1,23 +1,34 @@
 Q1. What class of bug are you reporting?                            [1 point]
+	Denial Of Service by using too much resources
 ___
 
 Q2. Describe the bug:                              [3 points = 0.5 + 0.5 + 2]
 a) Where is the bug?
-File, line: ___
-Function: ___
+	File, line: command.cpp:371
+	Function: putCommand::exec
 
 b) What capabilities does the bug give to the attacker? 
+	This bug allows the attacker to crash the server (i.e. ==> denial of service attack).
 ___
 
 c) What are the conditions under which the bug can be exploited, and describe
 your exploit? 
+	The attacker needs to be logged in. The attacker has to have a file 'attack-file' in its files.
+	Then he has to send the command 'put attack-file $SIZE' with $SIZE is bigger than the effective size of 'attack-file' a huge number of times (it's possible since 'put' is asynchronous). The server will keep the port open since it will wait for more data at each call.
+
+	This method exhausts either the file descriptors or the ports of the server. We used a number bigger that 65'535 as it's the number of ports.
 ___
 
 Q3. Describe the fix for the bug:                       [2 points = 0.5 + 1.5]
-a) Can the vulnerability be mitigated through automated techniques?    
+a) Can the vulnerability be mitigated through automated techniques?
    If yes, explain.
+
+   No, we have to manually code some restrictions.
 ___
 
 b) Describe a code-fix for the bug. This must correspond to the submitted patch.
-___
 
+	The code fix is simply to put 'command.cpp:371' in a 'try-catch' block.
+
+	An other method will be to restrict the number of maximal 'put session' active in parallel.
+___

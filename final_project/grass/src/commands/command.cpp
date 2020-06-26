@@ -368,9 +368,14 @@ int putCommand::exec(std::string &result, UserState &state) {
 
   int putFilesize = atoi(args[1].c_str());
   volatile int *putPortPtr = &state.putPort;
-  ThreadPool::run([putFilename, putFilesize, putPortPtr] {
-    Server::putFile(putFilename, putFilesize, putPortPtr);
-  });
+  try{
+    ThreadPool::run([putFilename, putFilesize, putPortPtr] {
+      Server::putFile(putFilename, putFilesize, putPortPtr);
+    });
+  } catch (...){
+    result.append(ERROR_STR "The user has a problem with the put command (too much usage of this one?)\n");
+    return 0;
+  }
 
   /* Wait until putfile writes the port number and file size */
   while (state.putPort == 0);
