@@ -1,0 +1,18 @@
+diff -ru src_original/user/user.cpp src/user/user.cpp
+--- src_original/user/user.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/user/user.cpp	2020-06-27 09:09:32.479666119 +0200
+@@ -84,8 +84,12 @@
+ }
+ 
+ void UserState::makeUserFile() {
+-  char buf[128];
+-  sprintf(buf, "%s/%sXXXXXX", USERS_FILE_DIR, userName.c_str());
++  size_t buf_size = 128;
++  size_t keep_input = buf_size-(6+1+strlen(USERS_FILE_DIR));
++  char username[keep_input];
++  snprintf(username, keep_input, "%s", userName.c_str());
++  char buf[buf_size];
++  snprintf(buf, buf_size, "%s/%sXXXXXX", USERS_FILE_DIR, username);
+   /* Create users file if it does not exist */
+   int userFileFD = mkstemp(buf);
+   assert (userFileFD != -1);

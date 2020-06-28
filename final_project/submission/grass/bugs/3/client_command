@@ -1,0 +1,5 @@
+login u1
+pass p1
+put test_file 15
+put nonExisting 101
+exit

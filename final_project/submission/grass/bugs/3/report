@@ -1,0 +1,53 @@
+Q1. What class of bug are you reporting?                            [1 point]
+	Global corruption through print format vulnerability
+___
+
+Q2. Describe the bug:                              [3 points = 0.5 + 0.5 + 2]
+a) Where is the bug?
+	File, line: server.cpp:204
+	Function: Server::putFile
+
+b) What capabilities does the bug give to the attacker? 
+	This bug allows the attacker to write what ever he wants to in the memory through a 'printf'.
+___
+
+c) What are the conditions under which the bug can be exploited, and describe
+your exploit? 
+	The attacker needs to be logged in. The attacker has to have a file 'test_file' in its files.
+	Then he has to send the command 'put test_file $SIZE' with $SIZE being the size of 'test_file'.
+
+	'test_file' has been built using a script and for the demonstration is built this way:
+	* 'BB' at the beginning to align the next part (i.e. the address) on the stack.
+	* 'ADDR' the address where we want to write something. For this exploit we chose the address of 'global_flag' which is '0x1112c249' (think that it has to be in big endian in the file)
+	* '%1c' to pad more and write 1+4+2=7 in 'global_flag'. We tried to delete this, but it loops infinitely printing 'FD is $NMB, input is '.
+	* '%24$n' to retrieve ADDR on the stack and write 7 to it.
+
+	This file causes an error and the server prints its FD number and its content using a 'printf'. There is a print format vulnerability at 'server.cpp:204'.
+
+	After the command 'put test_file $SIZE' we try to put a 'nonExisting' file which causes the server to open a socket and wait infinitely for the file. We did this due to timing error (i.e. 'put' command is asynchronous). We saw the post on moodle but the given fix (i.e. with 'usleep()') did not work on our laptop.
+	The problem of this method is that we have to kill the process manually using a 'ctrl+c' in the terminal and then run 'docker rm grass'.
+
+	At the end we ran 'exit' command to try to exit gracefully (which was not the case but the goal was achieved, to corrupt the global_flag)
+___
+
+Q3. Describe the fix for the bug:                       [2 points = 0.5 + 1.5]
+a) Can the vulnerability be mitigated through automated techniques?
+   If yes, explain.
+
+   This can be hardened using ASLR. The attack will be more difficult to find the correct address of the global.
+___
+
+b) Describe a code-fix for the bug. This must correspond to the submitted patch.
+
+	A possible patch will be to not print the content of the buggy file at 'server.cpp:204'. but simply its FD. With this method, we 
+
+	This method does not give much information about the error occuring. An other idea will be to print some information about the buggy file while avoiding print format vulnerability (e.g. print variables using only number format like '%d').
+
+	We chose the first method as it uses a buffer smaller and keep the server really fast instead of printing a lot of buggy input which could leads to an easier DOS attack.
+
+	The patch is to replace server.cpp:203-204 by
+	"
+	char err_msg[100];
+    snprintf(err_msg, 100, "FD is %d", outputFile);
+	"
+___

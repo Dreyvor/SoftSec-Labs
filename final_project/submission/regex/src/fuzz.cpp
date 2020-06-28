@@ -54,7 +54,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
 
 	size_t size_regex = 128;
 
-	if(Size < size_regex){ return 1; } // TODO : return value: AFL 1 vs LibFuzzer 0
+	if(Size < size_regex){ return 1; } // TODO : AFL 1 vs LibFuzzer 0
 
 	int err = 0;
 

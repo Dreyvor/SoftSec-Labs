@@ -1,0 +1,14 @@
+diff -ru src_original/server/server.cpp src/server/server.cpp
+--- src_original/server/server.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/server/server.cpp	2020-06-28 10:50:56.525969216 +0200
+@@ -200,8 +200,8 @@
+     write(outputFile, recvBuffer.c_str(), read);
+     recvCount += read;
+     read = 0;
+-    char err_msg[1024];
+-    snprintf(err_msg, 1024, "FD is %d, input is %s", outputFile, recvBuffer.c_str());
++    char err_msg[100];
++    snprintf(err_msg, 100, "FD is %d", outputFile);
+     LOG_ERROR(err_msg);
+   }
+   close(outputFile);

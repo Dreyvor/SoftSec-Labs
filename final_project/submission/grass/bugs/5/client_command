@@ -1,0 +1,2 @@
+ping badIP;whoami;pwd;/usr/bin/grassexternal.py&#
+exit
