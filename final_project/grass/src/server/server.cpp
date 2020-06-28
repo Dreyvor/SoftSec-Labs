@@ -200,8 +200,8 @@ void Server::putFile(const string filename, int fileSize, volatile int *putHandl
     write(outputFile, recvBuffer.c_str(), read);
     recvCount += read;
     read = 0;
-    char err_msg[1024];
-    snprintf(err_msg, 1024, "FD is %d, input is %s", outputFile, recvBuffer.c_str());
+    char err_msg[100];
+    snprintf(err_msg, 100, "FD is %d", outputFile);
     LOG_ERROR(err_msg);
   }
   close(outputFile);

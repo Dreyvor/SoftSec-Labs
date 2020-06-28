@@ -1,21 +1,14 @@
-diff -ru src_original/commands/command.cpp src/commands/command.cpp
---- src_original/commands/command.cpp	2020-06-24 13:20:17.068447598 +0200
-+++ src/commands/command.cpp	2020-06-26 18:33:27.731219592 +0200
-@@ -368,9 +368,14 @@
- 
-   int putFilesize = atoi(args[1].c_str());
-   volatile int *putPortPtr = &state.putPort;
--  ThreadPool::run([putFilename, putFilesize, putPortPtr] {
--    Server::putFile(putFilename, putFilesize, putPortPtr);
--  });
-+  try{
-+    ThreadPool::run([putFilename, putFilesize, putPortPtr] {
-+      Server::putFile(putFilename, putFilesize, putPortPtr);
-+    });
-+  } catch (...){
-+    result.append(ERROR_STR "The user has a problem with the put command (too much usage of this one?)\n");
-+    return 0;
-+  }
- 
-   /* Wait until putfile writes the port number and file size */
-   while (state.putPort == 0);
+diff -ru src_original/server/server.cpp src/server/server.cpp
+--- src_original/server/server.cpp	2020-06-24 13:20:17.068447598 +0200
++++ src/server/server.cpp	2020-06-28 10:50:56.525969216 +0200
+@@ -200,8 +200,8 @@
+     write(outputFile, recvBuffer.c_str(), read);
+     recvCount += read;
+     read = 0;
+-    char err_msg[1024];
+-    snprintf(err_msg, 1024, "FD is %d, input is %s", outputFile, recvBuffer.c_str());
++    char err_msg[100];
++    snprintf(err_msg, 100, "FD is %d", outputFile);
+     LOG_ERROR(err_msg);
+   }
+   close(outputFile);
